@@ -1,0 +1,161 @@
+umask 022
+
+# ------------------------------------------------------------------------------
+#  Environmental Settings                                                   {{{1  
+# ------------------------------------------------------------------------------
+export LANG=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
+export TERM=xterm-color
+export EDITOR="/opt/local/bin/mvim"
+export PAGER=vimpager
+export VISUAL="mvim -f"
+export PYTHONPATH=/opt/local/lib/python2.6
+export DROPBOX=/Users/axolx/Dropbox
+
+export DISPLAY=:0.0
+export JAVA_HOME=/Library/Java/Home
+
+export EC2_HOME=${DROPBOX}/lib/ec2-api-tools
+export AWS_CLOUDWATCH_HOME=${DROPBOX}/lib/CloudWatch
+#export EC2_PRIVATE_KEY=${HOME}/.ec2/pk-axolx-RJUMGZU7325L4VUDQW6NUFAQG3TNBBCK.pem
+#export EC2_CERT=${HOME}/.ec2/cert-axolx-RJUMGZU7325L4VUDQW6NUFAQG3TNBBCK.pem
+export EC2_PRIVATE_KEY=${HOME}/.ec2/pk-ombu-F4QAMM7X5HCASXTNZ5VNIFKBQTKWTZS5.pem
+export EC2_CERT=${HOME}/.ec2/cert-ombu-F4QAMM7X5HCASXTNZ5VNIFKBQTKWTZS5.pem
+export AWS_CLOUDWATCH_HOME=${DROPBOX}/lib/CloudWatch
+export ANDROID_SDK_HOME=${DROPBOX}/lib/android-sdk-mac_x86
+
+# ------------------------------------------------------------------------------
+#  Default Paths                                                            {{{1
+# ------------------------------------------------------------------------------
+PATH=/opt/local/bin:/opt/local/sbin:$PATH
+PATH=/opt/local/apache2/bin:$PATH
+PATH=$PATH:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:.
+PATH=$PATH:$HOME/sandbox/axolxnet/sysadmin/scripts
+PATH=$PATH:$HOME/sandbox/axolxnet/sysadmin/scripts/web
+PATH=$PATH:/Users/axolx/Dropbox/lib/scripts
+PATH=$PATH:$EC2_HOME/bin
+PATH=$PATH:$AWS_CLOUDWATCH_HOME/bin
+PATH=$PATH:$ANDROID_SDK_HOME/tools
+PATH=$PATH:$ANDROID_SDK_HOME/platform-tools
+PATH=$PATH:$DROPBOX/lib/repos/Cordova
+PATH=$PATH:$DROPBOX/lib/repos/phonegap-android/bin
+#PATH=$PATH:$DROPBOX/lib/php/zf/bin
+PATH=$PATH:$DROPBOX/bin
+INFOPATH=/usr/share/info
+MANPATH=`/usr/bin/manpath -q`
+MANPATH=/opt/local/man:$MANPATH
+MANPATH=/opt/local/share/man:$MANPATH
+
+export MANPATH
+
+# ------------------------------------------------------------------------------
+#  zsh Setup & Options                                                      {{{1
+# ------------------------------------------------------------------------------
+HISTFILE=~/.zsh/history
+HISTSIZE=5000
+SAVEHIST=5000
+
+fpath=(~/.zsh.d $fpath)
+autoload -U compinit && compinit
+autoload zmv
+autoload -Uz vcs_info
+
+setopt auto_list complete_in_word complete_aliases
+setopt no_beep                 # beeping is annoying
+setopt correct                 # spelling correction (how i switched to zsh)
+setopt pushdignoredups         # don't push more than 1 instance into stack
+setopt autopushd               # Make cd push old dir onto stack
+setopt equals                  # perform =filename access
+setopt histverify              # when using ! cmds, confirm first
+setopt alwaystoend             # when complete from middle, move cursor
+setopt extended_glob           # zsh style pattern matching
+unsetopt menu_complete   # do not autoselect the first completion entry
+unsetopt flowcontrol
+setopt auto_menu         # show completion menu on succesive tab press
+setopt complete_in_word
+
+
+# ------------------------------------------------------------------------------
+#  Functions                                                                {{{1
+# ------------------------------------------------------------------------------
+#
+# ------------------------------------------------------------------------------
+#  Vi mode                                                                  {{{1
+# ------------------------------------------------------------------------------
+
+bindkey -v
+
+function zle-line-init zle-keymap-select {
+    CURRENT_TIME_="%F{3}%D{%m/%d} %T%F{white}"
+    export PROMPT=$'%F{1}▶ $CURRENT_TIME_ | %F{4}%n@%m%F{white}:%F{28}%~${${KEYMAP/vicmd/}/(main|viins)/ | INS} %F{1}
+▶%F{white}%{\e[0m%} '
+    zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
+
+
+# ------------------------------------------------------------------------------
+#  Directory Aliases                                                        {{{1
+# ------------------------------------------------------------------------------
+export clients=$DROPBOX/ombu/clients
+export scripts=$HOME/sandbox/axolxnet/sysadmin/scripts
+
+# ------------------------------------------------------------------------------
+#  Aliases                                                                  {{{1
+# ------------------------------------------------------------------------------
+
+# Shortcut aliases
+alias ls='ls -hG'
+alias nocorrect p='ps -caxww -o "pid state %cpu user command"'
+alias nocorrect ds='directorysize'
+alias vim=mvim
+alias zf=zf.php
+
+# ------------------------------------------------------------------------------
+#  Prompt & Colors                                                          {{{1
+# ------------------------------------------------------------------------------
+#
+# Attributes        Foreground      Background
+# ------------      ------------    -------------
+# 00 = Default      30 = Black      40 = Black
+# 01 = Bold         31 = Red        41 = Red
+# 04 = Underline    32 = Green      42 = Green
+# 05 = Flashing     33 = Yellow     43 = Yellow
+#                   34 = Blue       44 = Blue
+#                   35 = Magenta    45 = Magenta
+#                   36 = Cyan       46 = Cyan
+#                   37 = Grey       47 = Grey
+
+# Set up two prompt colors - one for normal user, the other for superuser
+#[ $UID != 0 ] && export PROMPT=$'%{\e[37m%}[%m:%~]%{\e[0m%} '
+#
+
+ZLS_COLORS=''
+zstyle ':vcs_info:*' stagedstr '%F{28} '
+zstyle ':vcs_info:*' unstagedstr '%F{11} '
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{11}%r'
+zstyle ':vcs_info:*' enable git svn hg
+
+precmd () {
+    vcs_info
+    if [[ -z $(git ls-files --other --exclude-standard 2> /dev/null) ]] {
+        #zstyle ':vcs_info:*' formats ' [%F{green}%b%u%F{white}]'
+        # http://jnrowe.github.com/2009/10/28/TaD-Zsh_and_the_vcs.html
+        zstyle ':vcs_info:*' formats ' %F{2}%s%F{7}:%F{2}(%F{1}%b%F{2})%f'
+    } else {
+        zstyle ':vcs_info:*' formats ' [%F{green}%b%c%u%F{red} %F{white}]'
+    }
+}
+
+setopt prompt_subst
+
+CURRENT_TIME_="%F{3}%D{%m/%d} %T%F{white}"
+export PROMPT=$'%F{1}▶ $CURRENT_TIME_ | %F{4}%n@%m%F{white}:%F{28}%~ | INS %F{1}
+▶%F{white}%{\e[0m%} '
+RPROMPT='${vcs_info_msg_0_}'
+
+
+# vim: set fdm=marker : ~

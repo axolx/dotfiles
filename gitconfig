@@ -1,0 +1,14 @@
+[user]
+name = Martin Rio
+email = martin@ombuweb.com
+
+[color]
+ui = true
+
+[alias]
+st = status
+ci = commit
+dt = difftool
+
+[core]
+excludesfile = /Volumes/bluedat/Dropbox/rcfiles/gitignore

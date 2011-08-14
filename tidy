@@ -1,0 +1,16 @@
+indent: auto
+indent-spaces: 4
+wrap: 80 
+markup: yes
+show-warnings: yes
+numeric-entities: no
+quote-marks: yes
+quote-nbsp: yes
+quote-ampersand: no
+break-before-br: no
+uppercase-tags: no
+uppercase-attributes: no
+new-inline-tags: foo
+new-blocklevel-tags: header, footer, input, label
+new-empty-tags: bar
+

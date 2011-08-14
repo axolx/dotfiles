@@ -1,0 +1,11 @@
+.DS_Store
+.buildpath
+.zfproject.xml$
+\.project$
+^\.settings/*
+^nbproject/*
+.livereload
+^\.idea/*
+^.git/*
+\.un~$
+^tags$
