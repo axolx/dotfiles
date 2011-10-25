@@ -7,9 +7,11 @@ export LANG=en_US.UTF-8
 export LC_CTYPE=en_US.UTF-8
 export TERM=xterm-color
 export EDITOR="/opt/local/bin/mvim"
-export PAGER=vimpager
+# export PAGER=vimpager
+export PAGER=less
 export VISUAL="mvim -f"
 export PYTHONPATH=/opt/local/lib/python2.6
+export NODE_PATH=/opt/local/lib/node_modules
 export DROPBOX=/Users/axolx/Dropbox
 
 export DISPLAY=:0.0
@@ -19,8 +21,8 @@ export EC2_HOME=${DROPBOX}/lib/ec2-api-tools
 export AWS_CLOUDWATCH_HOME=${DROPBOX}/lib/CloudWatch
 #export EC2_PRIVATE_KEY=${HOME}/.ec2/pk-axolx-RJUMGZU7325L4VUDQW6NUFAQG3TNBBCK.pem
 #export EC2_CERT=${HOME}/.ec2/cert-axolx-RJUMGZU7325L4VUDQW6NUFAQG3TNBBCK.pem
-export EC2_PRIVATE_KEY=${HOME}/.ec2/pk-ombu-F4QAMM7X5HCASXTNZ5VNIFKBQTKWTZS5.pem
-export EC2_CERT=${HOME}/.ec2/cert-ombu-F4QAMM7X5HCASXTNZ5VNIFKBQTKWTZS5.pem
+export EC2_PRIVATE_KEY=${HOME}/.ec2/ombu-pk-J4TXTFWLUFVVOTGW5Q3RQKSHAKGC2KH2.pem
+export EC2_CERT=${HOME}/.ec2/ombu-cert-J4TXTFWLUFVVOTGW5Q3RQKSHAKGC2KH2.pem
 export AWS_CLOUDWATCH_HOME=${DROPBOX}/lib/CloudWatch
 export ANDROID_SDK_HOME=${DROPBOX}/lib/android-sdk-mac_x86
 

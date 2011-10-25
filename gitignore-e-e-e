@@ -2,3 +2,5 @@
 tags
 .hg
 .hgignore
+.livereload
+*.pyc
