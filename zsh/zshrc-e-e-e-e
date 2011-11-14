@@ -10,7 +10,6 @@ export EDITOR="/opt/local/bin/mvim"
 # export PAGER=vimpager
 export PAGER=less
 export VISUAL="mvim -f"
-export PYTHONPATH=/opt/local/lib/python2.6
 export NODE_PATH=/opt/local/lib/node_modules
 export DROPBOX=/Users/axolx/Dropbox
 
@@ -19,8 +18,8 @@ export JAVA_HOME=/Library/Java/Home
 
 export EC2_HOME=${DROPBOX}/lib/ec2-api-tools
 export AWS_CLOUDWATCH_HOME=${DROPBOX}/lib/CloudWatch
-#export EC2_PRIVATE_KEY=${HOME}/.ec2/pk-axolx-RJUMGZU7325L4VUDQW6NUFAQG3TNBBCK.pem
-#export EC2_CERT=${HOME}/.ec2/cert-axolx-RJUMGZU7325L4VUDQW6NUFAQG3TNBBCK.pem
+#export EC2_PRIVATE_KEY=${HOME}/.ec2/axolx-pk-RJUMGZU7325L4VUDQW6NUFAQG3TNBBCK.pem
+#export EC2_CERT=${HOME}/.ec2/axolx-cert-RJUMGZU7325L4VUDQW6NUFAQG3TNBBCK.pem
 export EC2_PRIVATE_KEY=${HOME}/.ec2/ombu-pk-J4TXTFWLUFVVOTGW5Q3RQKSHAKGC2KH2.pem
 export EC2_CERT=${HOME}/.ec2/ombu-cert-J4TXTFWLUFVVOTGW5Q3RQKSHAKGC2KH2.pem
 export AWS_CLOUDWATCH_HOME=${DROPBOX}/lib/CloudWatch
@@ -31,6 +30,8 @@ export ANDROID_SDK_HOME=${DROPBOX}/lib/android-sdk-mac_x86
 # ------------------------------------------------------------------------------
 PATH=/opt/local/bin:/opt/local/sbin:$PATH
 PATH=/opt/local/apache2/bin:$PATH
+PATH=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin:$PATH
+PATH=/opt/local/lib/mysql5/bin:$PATH
 PATH=$PATH:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:.
 PATH=$PATH:$HOME/sandbox/axolxnet/sysadmin/scripts
 PATH=$PATH:$HOME/sandbox/axolxnet/sysadmin/scripts/web
@@ -75,6 +76,15 @@ unsetopt menu_complete   # do not autoselect the first completion entry
 unsetopt flowcontrol
 setopt auto_menu         # show completion menu on succesive tab press
 setopt complete_in_word
+function _pip_completion {
+  local words cword
+  read -Ac words
+  read -cn cword
+  reply=( $( COMP_WORDS="$words[*]" \
+             COMP_CWORD=$(( cword-1 )) \
+             PIP_AUTO_COMPLETE=1 $words[1] ) )
+}
+compctl -K _pip_completion pip
 
 
 # ------------------------------------------------------------------------------
