@@ -20,7 +20,7 @@ sd = stash delete
 ss = stash show
 
 [core]
-	excludesfile = /Users/axolx/Dropbox/rcfiles/gitignore
+	excludesfile = /Users/axolx/Dropbox/dotfiles/gitignore
 
 [github]
 user = axolx

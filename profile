@@ -23,16 +23,14 @@ export AWS_CLOUDWATCH_HOME=${DROPBOX}/lib/CloudWatch
 # ------------------------------------------------------------------------------
 #  Bin paths                                                                {{{1
 # ------------------------------------------------------------------------------
-PATH=/opt/local/bin:/opt/local/sbin:$PATH
 PATH=/opt/local/apache2/bin:$PATH
 PATH=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin:$PATH
 PATH=/opt/local/lib/mysql5/bin:$PATH
-PATH=$PATH:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:.
+PATH=$DROPBOX/bin:$PATH
+PATH=.:/opt/local/bin:/opt/local/sbin:$PATH
 PATH=$PATH:/Users/axolx/Dropbox/lib/scripts
 PATH=$PATH:$EC2_HOME/bin
 PATH=$PATH:$AWS_CLOUDWATCH_HOME/bin
-PATH=$PATH:$DROPBOX/lib/php/drush
-PATH=$PATH:$DROPBOX/bin
 
 # ------------------------------------------------------------------------------
 #  Man paths                                                                {{{1

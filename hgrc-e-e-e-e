@@ -2,7 +2,7 @@
 username = Martin Rio <martin@ombuweb.com>
 merge = merge
 ssh = ssh -C
-ignore.other = $DROPBOX/rcfiles/hgignore
+ignore.other = $DROPBOX/dotfiles/hgignore
 commitsubrepos = False 
 
 [extensions]
@@ -68,5 +68,5 @@ git = True
 unified = 5
 
 [alias]
-gl = glog -l10 --template='\033[0;33m{rev}\033[0m {desc|firstline|strip} \033[0;35m{branches}\033[0m \033[0;33m{tags}\033[0m\n\033[1;30m({date|age} by {author|person})\033[0m\n\n'
+cl = glog -l10 --template='\033[0;33m{rev}\033[0m {desc|firstline|strip} \033[0;35m{branches}\033[0m \033[0;33m{tags}\033[0m\n\033[1;30m({date|age} by {author|person})\033[0m\n\n'
 ? = summary
