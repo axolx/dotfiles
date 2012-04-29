@@ -13,8 +13,8 @@ graphlog=
 convert=
 graphlog=
 rebase=
-hggit = $DROPBOX/lib/repos/hg-git/hggit
-hgsubversion = $DROPBOX/lib/repos/hgsubversion/hgsubversion
+#hggit = $DROPBOX/lib/repos/hg-git/hggit
+#hgsubversion = $DROPBOX/lib/repos/hgsubversion/hgsubversion
 patchbomb=
 
 [extdiff]
@@ -24,6 +24,8 @@ cmd.bbdiff = /usr/local/bin/bbdiff
 opts.bbdiff = --wait
 cmd.ksdiff = /usr/local/bin/ksdiff-wrapper
 opts.ksdiff = hg
+cmd.sourcetreediff=opendiff
+opts.sourcetreediff=
 
 [color]
 status.modified = cyan
