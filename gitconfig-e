@@ -1,6 +1,6 @@
 [user]
-	name = Martin Rio
-	email = martin@ombuweb.com
+name = Martin Rio
+email = martin@ombuweb.com
 
 [color]
 ui = true
@@ -13,14 +13,14 @@ co = checkout
 com = checkout --track -b master origin/master
 one = show -s --pretty='format:%h (%s)'
 glog = log --graph --all --decorate
-root = rev-parse --show-toplevel 
+root = rev-parse --show-toplevel
 ; stashing
 sl = stash list
 sd = stash delete
 ss = stash show
 
 [core]
-	excludesfile = /Users/axolx/Dropbox/dotfiles/gitignore
+excludesfile = /Users/axolx/Dropbox/dotfiles/gitignore
 
 [github]
 user = axolx
@@ -39,20 +39,20 @@ prompt = false
 cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
 
 [difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+path =
 
 [mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+trustExitCode = true
 
 [mergetool "mvim"]
-  cmd = mvim -d -g "$LOCAL" "$MERGED" "$REMOTE"
-  keepBackup = false
-  trustExitCode = false
+cmd = mvim -d -g "$LOCAL" "$MERGED" "$REMOTE"
+keepBackup = false
+trustExitCode = false
 
 [branch]
-    autosetuprebase = always
+autosetuprebase = always
 
 [merge]
-  tool = mvim
+tool = mvim
