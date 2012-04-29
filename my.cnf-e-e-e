@@ -1,5 +1,0 @@
-[mysql]
-pager=less -niSFX
-
-[mysqld]
-max_allowed_packet=16M

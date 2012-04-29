@@ -1,7 +1,0 @@
-.DS_Store
-tags
-.hg
-.hgignore
-.livereload
-node_modules
-*.pyc

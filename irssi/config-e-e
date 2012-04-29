@@ -28,7 +28,7 @@ chatnets = {
   freenode = {
     type = "IRC";
     nick = "axolx";
-    autosendcmd = "/msg nickserv identify SETME ;wait 2000";
+    autosendcmd = "/msg nickserv identify 48404859 ;wait 2000";
   };
   oftc = { type = "IRC"; };
 };
