@@ -1,6 +1,0 @@
-[submodule "vim"]
-	path = vim
-	url = git@github.com:axolx/vim-files.git
-[submodule "drush/drush_make"]
-	path = drush/drush_make
-	url = http://git.drupal.org/project/drush_make.git
