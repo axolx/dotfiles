@@ -1,0 +1,15 @@
+Metadata-Version: 1.0
+Name: cloth
+Version: 0.2
+Summary: EC2 tasks and utilities for use with fabric
+Home-page: https://github.com/garethr/cloth/
+Author: Gareth Rushgrove
+Author-email: gareth@morethanseven.net
+License: MIT License
+Description: UNKNOWN
+Keywords: fabric,ec2
+Platform: UNKNOWN
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python

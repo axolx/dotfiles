@@ -1,0 +1,7 @@
+#!/Users/axolx/.virtualenvs/vakap/bin/python
+# EASY-INSTALL-DEV-SCRIPT: 'Vakap==0.0.1','vakap'
+__requires__ = 'Vakap==0.0.1'
+from pkg_resources import require; require('Vakap==0.0.1')
+del require
+__file__ = '/Volumes/bluedat/sandbox/projects/vakap/bin/vakap'
+execfile(__file__)
