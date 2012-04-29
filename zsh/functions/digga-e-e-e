@@ -1,0 +1,4 @@
+# All the dig info, 'cause I can never remember it
+digga () {
+  dig +nocmd $1 any +multiline +noall +answer
+}

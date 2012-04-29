@@ -10,6 +10,9 @@
 /**
  * Get stored hook declarations, keyed by hook name, with destination.
  *
+ * @param $dir
+ *  The directory to look in for processed data.
+ *
  * @return
  *   An array of the form:
  *     [hook_action_info] => 
@@ -24,6 +27,9 @@ function module_builder_get_hook_declarations($dir = NULL) {
       $return[$hook['name']] = array(
         'declaration' => $hook['definition'],
         'destination' => $hook['destination'],
+        'group'       => $group,
+        'file_path'   => $hook['file_path'],
+        'body'        => $hook['body'],
       );
     }
   }
@@ -33,6 +39,9 @@ function module_builder_get_hook_declarations($dir = NULL) {
 
 /**
  * Get just hook declarations, keyed by hook name.
+ *
+ * @param $dir
+ *  The directory to look in for processed data.
  *
  * @return
  *   An array of the form:
@@ -53,6 +62,8 @@ function module_builder_get_hook_declarations_plain($dir = NULL) {
 /**
  * Get just hook names.
  *
+ * @param $dir
+ *  The directory to look in for processed data.
  * @param $short
  *   Whether to return hook names as just 'init' or 'hook_init'.
  *   Might as well call like this: module_builder_get_hook_names('short') for clarity.
@@ -75,6 +86,9 @@ function module_builder_get_hook_names($dir = NULL, $short = FALSE) {
 
 /**
  * Helper for API functions that don't care about file grouping.
+ *
+ * @param $dir
+ *  The directory to look in for processed data.
  */
 function module_builder_get_hook_data_flat($dir = NULL) {
   $data = module_builder_get_hook_data($dir);
@@ -89,6 +103,9 @@ function module_builder_get_hook_data_flat($dir = NULL) {
 
 /**
  * Retrieve hook data from storage file.
+ *
+ * @param $directory
+ *  The directory to look in for processed data.
  */
 function module_builder_get_hook_data($directory = NULL) {
   if (!isset($directory)) {
@@ -104,6 +121,9 @@ function module_builder_get_hook_data($directory = NULL) {
 
 /**
  * Get the timestamp of the processed file.
+ *
+ * @param $directory
+ *  The directory to look in for processed data.
  */
 function module_builder_get_hook_data_last_updated($directory = NULL) {
   if (!isset($directory)) {
@@ -213,11 +233,18 @@ function module_builder_process_hook_data($hook_file_data) {
         $destination = $file_data['destination'];
       }
       
-      $hook_groups[$group][$key] = array(
+      // We index numerically and so keep the incoming sort order.
+      // But if there are multiple hook files for one module / group, then
+      // they will go sequentially one after the other.
+      // TODO: should this be improved, eg to group also by filename?
+      $hook_groups[$group][] = array(
         'name' => $hook, 
         'definition'  => $hook_data_raw['definitions'][$key],
         'description' => $hook_data_raw['descriptions'][$key],
         'destination' => $destination,
+        'group'       => $group,
+        'file_path'   => $file_data['path'],
+        'body'        => $hook_data_raw['bodies'][$key],
       );
       //dsm($hook_groups);
 
@@ -229,7 +256,8 @@ function module_builder_process_hook_data($hook_file_data) {
   
   // Write the processed data to a file.
   $directory = _module_builder_get_hooks_directory();    
-  file_put_contents("$directory/hooks_processed.php", serialize($hook_groups));
+  $serialized = serialize($hook_groups);
+  file_put_contents("$directory/hooks_processed.php", $serialized);
   
   return $hook_groups;
 }
@@ -282,7 +310,7 @@ function module_builder_get_doc_files() {
  * @param string $file
  *   Name of hook file
  * @return array
- *   Array of hook data:
+ *   Array of hook data, in three arrays:
  *    [0]: Each hook's user-friendly description
  *    [1]: Each hook's entire function declaration: "function name($params)"
  *    [2]: Name of each hook
@@ -294,11 +322,13 @@ function _module_builder_process_hook_file($filepath) {
   // The pattern for extracting function data: capture first line of doc,
   // function declaration, and hook name.
   $pattern = '[
-      / \* \* \n    # start phpdoc
-      \ \* \ ( .* ) \n  # first line of phpdoc: capture the text
-  (?: \ \* .* \n )* # lines of phpdoc
-      \ \* /  \n    # end phpdoc
-    ( function \ ( hook_\w* ) .* ) \  { # function declaration: capture both entire declaration and name
+           / \* \* \n     # start phpdoc
+          \  \* \  ( .* ) \n  # first line of phpdoc: capture the text
+      (?: \  \* .* \n )*  # lines of phpdoc
+          \  \* /  \n     # end phpdoc
+         ( function \ ( hook_\w* ) .* ) \  { # function declaration: capture both entire declaration and name
+     ( (?: .* \n )*? )    # function body
+         ^ }
   ]mx';  
 
   preg_match_all($pattern, $contents, $matches);
@@ -310,6 +340,7 @@ function _module_builder_process_hook_file($filepath) {
     'descriptions' => $matches[1],
     'definitions'  => $matches[2],
     'names'        => $matches[3], 
+    'bodies'       => $matches[4],
   );
  
   return $data;

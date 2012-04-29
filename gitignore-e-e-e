@@ -3,4 +3,5 @@ tags
 .hg
 .hgignore
 .livereload
+node_modules
 *.pyc

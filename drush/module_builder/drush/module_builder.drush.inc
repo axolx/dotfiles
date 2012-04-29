@@ -45,29 +45,29 @@ function module_builder_drush_command() {
     'callback' => 'drush_module_builder_callback_build',
     'description' => "Generate the code for a new Drupal module, including file headers and hook implementations.",
     'arguments' => array(
-      'module name' => 'The machine name of the module.',
-      'hooks' => 'Short names of hooks, separated by spaces.',
+      'module name' => "The machine name of the module. Use '.' to specify the current folder name.",
+      'hooks' => "Short names of hooks, separated by spaces. Hook preset groups can be specific with an initial '@', eg '@block'.",
     ),
     'aliases' => array('mb'),
     'options' => array(
-      '--noi' => "Disables interactive mode.",
-      '--data' => "Location to read hook data. May be absolute, or relative to Drupal files dir. Defaults to 'files/hooks'.",
-      '--build' => "Which file type to generate: 'all', 'code', 'info', 'FILE'. " .
+      'noi' => "Disables interactive mode.",
+      'data' => "Location to read hook data. May be absolute, or relative to Drupal files dir. Defaults to 'files/hooks'.",
+      'build' => "Which file type to generate: 'all', 'code', 'info', 'FILE'. " .
         "'all' generates everything: info and any code files needed by the requested hooks. " .
         "'code' generates code files as needed. " .
         "'info' makes just the info file. " .
         "'module', 'install' make just the foo.module or foo.install files. " .
         "If custom modules define other files to output, you can request those too, omitting the module root name part and any .inc extension, eg 'module_builder' for 'foo.module_builder.inc. " .  "\n" .
         "Default is 'all' if writing new files, 'code' if appending to file or outputting only to terminal.",
-      '--write' => 'Write files to sites/all/modules. Will prompt to overwrite existing files; use --yes to force. Use --quiet to suppress output to the terminal.',
-      '--go' => 'Write all module files and enable the new module. Take two commands into the shower? Not me.',
-      '--add' => "Append hooks to module file. Implies '--write --build=code'. Warning: will not check hooks already exist.",
-      '--name' => 'Readable name of the module.',
-      '--desc' => 'Description (for the admin module list).',
-      '--helptext' => 'Module help text (for the system help).',
-      '--dep' => 'Dependencies, separated by spaces, eg "forum views".',
-      '--package' => 'Module package.',
-      '--parent' => "Name of a module folder to place this new module into; use if this module is to be added to an existing package. Use '.' for the current working directory.",
+      'write' => 'Write files to sites/all/modules. Will prompt to overwrite existing files; use yes to force. Use quiet to suppress output to the terminal.',
+      'go' => 'Write all module files and enable the new module. Take two commands into the shower? Not me.',
+      'add' => "Append hooks to module file. Implies 'write build=code'. Warning: will not check hooks already exist.",
+      'name' => 'Readable name of the module.',
+      'desc' => 'Description (for the admin module list).',
+      'helptext' => 'Module help text (for the system help).',
+      'dep' => 'Dependencies, separated by spaces, eg "forum views".',
+      'package' => 'Module package.',
+      'parent' => "Name of a module folder to place this new module into; use if this module is to be added to an existing package. Use '.' for the current working directory.",
     ),
     'examples' => array(
       'drush mb my_module menu cron nodeapi' => 
@@ -93,7 +93,7 @@ function module_builder_drush_command() {
     'callback' => 'drush_module_builder_callback_hook_download',
     'description' => "Update module_builder hook data.",
     'options' => array(
-      '--data' => "Location to save downloaded files. May be absolute, or relative to Drupal files dir. Defaults to 'files/hooks'.",
+      'data' => "Location to save downloaded files. May be absolute, or relative to Drupal files dir. Defaults to 'files/hooks'.",
     ),
     'aliases' => array('mbdl'),
     //'bootstrap' => DRUSH_BOOTSTRAP_DRUSH, // No bootstrap at all.    
@@ -102,6 +102,9 @@ function module_builder_drush_command() {
   $items['mb-list'] = array(
     'callback' => 'drush_module_builder_callback_hook_list',
     'description' => "List the hooks module_builder knows about.",
+    'arguments' => array(
+      'modules' => '(optional) Names of modules, separated by spaces.',
+    ),
   );
 
   $items['mb-analyze'] = array(
@@ -109,7 +112,7 @@ function module_builder_drush_command() {
     'description' => "List the hooks found in a given module.",
     'aliases' => array('mban'),
     'options' => array(
-      '--flat' => "Shows a flat list of hooks rather than grouped by file.",
+      'flat' => "Shows a flat list of hooks rather than grouped by file.",
     ),
   );
 
@@ -133,7 +136,20 @@ function module_builder_drush_command() {
     'callback' => 'drush_module_builder_callback_get_data_dir',
     'description' => "Print the location of the module builder data directory.",
   );
-  
+
+  // Retain backwards compatility with Drush 4 and whatever other version
+  // numbers come before 5.
+  if (version_compare(DRUSH_VERSION, '5.0-dev', '<')) {
+    foreach ($items as $command => $item) {
+      if (isset($item['options'])) {
+        $items[$command]['options'] = array();
+        foreach ($item['options'] as $option => $text) {
+          $items[$command]['options']["--$option"] = $text;
+        }
+      }
+    }
+  }
+
   return $items;
 }
 
@@ -238,11 +254,11 @@ function drush_module_builder_callback_build() {
   module_builder_include('generate');
   // Build module code in all cases bar 'info'.
   if ($build != 'info') {
-    module_builder_build_module($commands, $module_data, $build_list);        
+    module_builder_build_module($module_data, $build_list);
   }
   // Build info code in cases 'info' and 'all'.
   if ($build == 'info' or $build == 'all') {
-    module_builder_build_info($commands, $module_data);
+    module_builder_build_info($module_data);
   }
   
   /*
@@ -280,6 +296,11 @@ function module_builder_build_data($commands) {
       'commands' => 0,
       'prompt' => dt('module name'),
       'required' => TRUE,
+    ),
+    'presets' => array(
+      'prompt' => dt('required hook presets'),
+      // This has neither 'commands' nor 'key' set, as these are pulled from the
+      // hook list in non-interactive mode.
     ),
     // It is essential this key follow the root name, so that the the root
     // name gets to the commands array first.
@@ -358,20 +379,49 @@ function module_builder_build_data($commands) {
       }
     }
   }
-  
+
+  // Extra magic: a machine name given as '.' means use the current folder as
+  // the module name.
+  if ($module_data['module_root_name'] == '.') {
+    $module_dir = basename(drush_get_context('DRUSH_OLDCWD'));
+    $module_data['module_root_name'] = $module_dir;
+  }
+
+  // Include generating component file.
+  module_builder_include('process');
+  $hook_definitions = module_builder_get_hook_data_flat();
+
   // Extra processing for the hooks array (or not).
+  $hook_presets = module_builder_get_hook_presets();
+  $hooks = array();
   if (!is_array($module_data['hooks'])) {
     $module_data['hooks'] = preg_split('/\s+/', $module_data['hooks']);
   }
   // Convert the array from numeric to keyed by full hook name.
   foreach ($module_data['hooks'] as $hook_name) {
-    $hooks["hook_$hook_name"] = TRUE;
+    // Hook presets can be specified with an initial @.
+    if (substr($hook_name, 0, 1) == '@') {
+      $preset_name = substr($hook_name, 1);
+      // Convert the preset hooks list to the right format and add it to the array.
+      $preset_hooks = array_fill_keys($hook_presets[$preset_name]['hooks'], TRUE);
+      $hooks += $preset_hooks;
+    }
+    else {
+      // By default, accept the short definition of hooks, ie 'boot' for 'hook_boot'.
+      if (isset($hook_definitions["hook_$hook_name"])) {
+        $hooks["hook_$hook_name"] = TRUE;
+      }
+      // Also fall back to allowing full names. This is handy if you're copy-pasting
+      // from an existing module and want the same hooks.
+      // In theory there won't be any clashes; only hook_hook_info() is weird.
+      elseif (isset($hook_definitions[$hook_name])) {
+        $hooks[$hook_name] = TRUE;
+      }
+    }
   }
   // Special shortcut to get ALL THE HOOKS. BWAHAHA MINE ALL MINE.
   if (count($hooks) == 1 && isset($hooks['hook_all'])) {
-    // Include generating component file.
-    module_builder_include('process');
-    $hooks = module_builder_get_hook_data_flat();
+    $hooks = $hook_definitions;
   }
   $module_data['hooks'] = $hooks;
 
@@ -389,8 +439,6 @@ function module_builder_default_readable_name($commands, $module_data) {
 /**
  * Generates and outputs module code.
  *
- * @param $commands
- *    The drush array of commands.
  * @param $module_data
  *    An array of module data. Passed by reference so file information can
  *    be added by module_builder_generate_module().
@@ -398,7 +446,7 @@ function module_builder_default_readable_name($commands, $module_data) {
  *    An array of requested code files to output
  *    'code' or 'all' means all of them.
  */  
-function module_builder_build_module($commands, &$module_data, $build_list) {
+function module_builder_build_module(&$module_data, $build_list) {
   //drush_print_r($module_data);
   //exit;
    
@@ -467,7 +515,7 @@ function module_builder_requested_filenames($module_root_name, $real, $abbrev) {
 /**
  * Generates and outputs info file code.
  */  
-function module_builder_build_info($commands, $module_data) {
+function module_builder_build_info($module_data) {
   module_builder_include('generate');
   $info_code = module_builder_generate_info($module_data);
 
@@ -491,8 +539,17 @@ function module_builder_drush_output_code($module_root_name, $filename, $code) {
   // Add to file option implies write.
   // Write & go option implies write.
   if (drush_get_option(array('write', 'add', 'go'))) {
-    
-    $module_dir = pm_dl_destination('module');
+    // Drush changes function names for version 5.
+    // I wish its branch names and version numbers made some sort of sense.
+    if (version_compare(DRUSH_VERSION, '5.0-dev', '>=')) {
+      // There is probably a proper way to do this but it's Sunday morning and
+      // I want this to just work and so brute force appeals.
+      require_once DRUSH_BASE_PATH . '/commands/pm/download.pm.inc';
+      $module_dir = _pm_download_destination('module');
+    }
+    else {
+      $module_dir = pm_dl_destination('module');
+    }
     
     // Gee great. Drush HEAD doesn't give us the trailing /.
     if (substr($module_dir, -1, 1) != '/') {
@@ -592,21 +649,49 @@ function drush_module_builder_callback_hook_list() {
     drush_set_error(DRUSH_APPLICATION_ERROR, $e->getMessage());
     return;
   }
-  
+
+  $commands = func_get_args();
+
   // Include generating component file.
   module_builder_include('process');
-  
+
   $data = module_builder_get_hook_data();
   $time = module_builder_get_hook_data_last_updated();
 
-  foreach ($data as $file => $hooks) {
+  if (count($commands)) {
+    // Put the requested filenames into the keys of an array, and intersect them
+    // with the hook data.
+    $files_requested = array_fill_keys($commands, TRUE);
+    $data_requested = array_intersect_key($data, $files_requested);
+  }
+  else {
+    $data_requested = $data;
+  }
+
+  drush_print_r($data);
+
+  if (!count($data_requested) && count($files_requested)) {
+    drush_print(t("No hooks found for the specified files."));
+  }
+
+  foreach ($data_requested as $file => $hooks) {
     drush_print("Group $file:", 2);
     foreach ($hooks as $key => $hook) {
       drush_print($hook['name'] . ': ' . $hook['description'], 4);
     }
   }
-  
-  drush_print(t("Hook data retrieved from @dir.", array('@dir' => _module_builder_get_hooks_directory())));  
+
+  // List presets.
+  module_builder_include('process');
+  $hook_presets = module_builder_get_hook_presets();
+  foreach ($hook_presets as $hook_preset_name => $hook_preset_data) {
+    drush_print("Preset $hook_preset_name: " . $hook_preset_data['label'], 2);
+    foreach ($hook_preset_data['hooks'] as $hook) {
+      drush_print($hook, 4);
+    }
+  }
+
+  drush_print(t("Hook data retrieved from @dir.", array('@dir' => _module_builder_get_hooks_directory())));
   drush_print(t("Hook data was processed on @time.", array('@time' => $time)));
 
   //print_r($data);
@@ -688,12 +773,13 @@ function drush_module_builder_callback_doc_hooks() {
   module_builder_include('process');
   module_builder_include('generate');
   
-  $hook_names = module_builder_get_hook_names('short');
+  $hook_names = module_builder_get_hook_names(_module_builder_get_hooks_directory(), TRUE);
 
   $pattern = '[(?<! \* / \n )' . # no PHP doc: single quoted so \n works
     "function \ image_gallery _ ( \w * )  # function declaration: capture hook name
      ]mx";
-    
+
+  $filepath = realpath(drush_get_context('DRUSH_DRUPAL_ROOT'));
   foreach ($module_files as $filename) {
     $code = file_get_contents($filepath . '/' . $filename);
     //print $code;

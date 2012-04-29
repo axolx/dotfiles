@@ -142,7 +142,8 @@ EOT;
       $code .= "\n" . $this->hook_doxygen($hook_name);
 
       // function declaration: put in the module name, add closing brace, decode html entities
-      $declaration = str_replace('hook', $module_data['module_root_name'], $hook['declaration']) . ' {';
+      $declaration = preg_replace('/(?<=function )hook/', $module_data['module_root_name'], $hook['declaration']);
+      $declaration .= ' {';
       $code .= htmlspecialchars_decode($declaration);
 
 
@@ -161,7 +162,8 @@ EOT;
       else {
         $code .= "\n\n";
       }
-      $code .= "}\n\n";
+      // Gap between successive hooks.
+      $code .= "}\n";
     } // foreach hook
 
     // Replace variables
@@ -253,6 +255,8 @@ class ModuleBuilderGeneratorInfo extends ModuleBuilderGenerator {
       }
     }
     $info = implode("\n", $merged_lines);
+    // Add a newline to the final line.
+    $info .= "\n";
     return $info;
   }
 }
@@ -461,9 +465,13 @@ function module_builder_get_templates($module_data) {
   if (is_null($hook_function_declarations)) {
     return NULL;
   }
+  //drush_print_r($hook_function_declarations);
+  // TODO: this should contain the name of the api.php file that provided it!
   
   // Trim this down to just the ones we care about.
-  $hook_function_declarations = array_intersect_key($hook_function_declarations, $requested_hooks);
+  // In order to be tolerant about case in the user input we change case in both
+  // arrays -- both because some hooks are defined in mixed case.
+  $hook_function_declarations = array_intersect_key(array_change_key_case($hook_function_declarations), array_change_key_case($requested_hooks));
   //print_r("hook_function_declarations: \n");
   //drush_print_r($hook_function_declarations);
   
@@ -602,6 +610,11 @@ function module_builder_get_templates($module_data) {
 
     if (!isset($hook_data_return[$destination][$hook_name])) {
       $hook_data_return[$destination][$hook_name] = $hook_function_declarations[$hook_name];
+    }
+    // We have no template data, so fill in the sample from the api.php file,
+    // as this is often informative.
+    if (empty($hook_data_return[$destination][$hook_name]['template'])) {
+      $hook_data_return[$destination][$hook_name]['template'] = $hook_function_declarations[$hook_name]['body'];
     }
   }
   

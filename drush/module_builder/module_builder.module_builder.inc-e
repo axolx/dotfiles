@@ -159,6 +159,11 @@ function module_builder_module_builder_info() {
         ),     
       ),
     ),
+    // Hooks in theme.api.php. This does nothing yet!
+    'theme' => array(
+      'destination' => 'template.php',
+    ),
+    // Views
     'views' => array(
       'hook_destinations' => array(
         '%module.views.inc' => array(
@@ -167,6 +172,19 @@ function module_builder_module_builder_info() {
           'hook_views_plugins',
           'hook_views_plugins_alter',
           'hook_views_query_alter',
+        ),
+        '%module.views_default.inc' => array(
+          'hook_views_default_views',
+        ),
+      ),
+    ),
+    'rules' => array(
+      'hook_destinations' => array(
+        '%module.rules.inc' => array(
+          'hook_rules_action_info',
+        ),
+        '%module.rules_default.inc' => array(
+          'hook_default_rules_configuration',
         ),
       ),
     ),

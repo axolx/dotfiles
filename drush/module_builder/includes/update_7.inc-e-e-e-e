@@ -93,8 +93,11 @@ function module_builder_update_documentation() {
 
 /**
  * Add extra data about hook destinations to the hook file data.
+ *
  * This allows entire files or individual hooks to have a file other than
  * the default %module.module as their destination.
+ *
+ * @see module_builder_module_builder_info().
  */
 function _module_builder_get_hook_destinations(&$hook_files) {
   // Get data by invoking our hook.
@@ -107,13 +110,21 @@ function _module_builder_get_hook_destinations(&$hook_files) {
     // @todo, possibly: this feels like slightly shaky ground.
     $filename = "$module.api.php";
     
+    // Skip filenames we haven't already found, so we don't pollute our data
+    // array with hook destination data for files that don't exist here.
+    if (!isset($hook_files[$filename])) {
+      continue;
+    }
+
+    // The module data can set a single destination for all its hooks.
     if (isset($module_data['destination'])) {
       $hook_files[$filename]['destination'] = $module_data['destination'];
     }
+    // It can also (or instead) set a destination per hook.
     if (isset($module_data['hook_destinations'])) {
+      $hook_files[$filename]['hook_destinations'] = array();
       foreach ($module_data['hook_destinations'] as $destination => $hooks) {
         $destinations[$module] = array_fill_keys($hooks, $destination);
-        $hook_files[$filename]['hook_destinations'] = array();
         $hook_files[$filename]['hook_destinations'] += array_fill_keys($hooks, $destination);
       }
     }
