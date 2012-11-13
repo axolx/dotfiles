@@ -1,3 +1,0 @@
-#!/opt/local/bin/zsh
-# This hook is run during the startup phase when loading virtualenvwrapper.sh.
-
