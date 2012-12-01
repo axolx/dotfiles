@@ -1,0 +1,38 @@
+# $Id: sample.mailcap,v 3.0 2002/01/24 12:11:17 roessler Exp $
+
+# ~/.mutt/mailcap
+#
+# this uses the view_attachment script found in ~/.mutt/view_attachment.sh
+#
+# this is meant for an OS X system
+
+# MS Excel
+# this will use the default xls spreadsheet handler from open
+application/x-msexcel; /Users/axolx/.mutt/view_attachment.sh %s
+application/ms-exc; /Users/axolx/.mutt/view_attachment.sh %s
+application/excel; /Users/axolx/.mutt/view_attachment.sh %s
+application/msexcel; /Users/axolx/.mutt/view_attachment.sh %s
+application/vnd.ms-exc; /Users/axolx/.mutt/view_attachment.sh %s
+application/vnd.ms-excel; /Users/axolx/.mutt/view_attachment.sh %s
+
+# MS Word
+# use textedit to open .doc files as it's more light-weight
+application/msword; /Users/axolx/.mutt/view_attachment.sh %s "-" '/Applications/TextEdit.app'
+text/richtext; /Users/axolx/.mutt/view_attachment.sh %s "-" '/Applications/TextEdit.app'
+
+# Images
+image/jpeg; /Users/axolx/.mutt/view_attachment.sh %s jpeg
+image/pjpeg; /Users/axolx/.mutt/view_attachment.sh %s 
+image/png; /Users/axolx/.mutt/view_attachment.sh %s png
+image/gif; /Users/axolx/.mutt/view_attachment.sh %s gif
+
+# PDF
+application/pdf; /Users/axolx/.mutt/view_attachment.sh %s pdf
+
+# HTML
+text/html; /Users/axolx/.mutt/view_attachment.sh %s html; copiousoutput
+#text/html; elinks -force-html %s
+
+# Unidentified.
+application/octet-stream; /Users/axolx/.mutt/view_attachment.sh %s "-" 
+text/x-vcard; /Users/axolx/.mutt/vcard.filter.pl; copiousoutput

@@ -1,0 +1,25 @@
+set record=^
+set my_martinrio=imaps://imap.gmail.com:993
+
+set header_cache = ~/.mutt/cache/headers_martinrio
+
+set spoolfile= =martin.rio/INBOX
+set postponed= =martin.rio/Drafts
+set trash= =martin.rio/Trash
+
+set smtp_url=smtps://martin.rio@gmail.com@smtp.gmail.com:465
+set smtp_pass=SETME
+
+my_hdr From: Martin Rio <martin.rio@gmail.com>
+my_hdr Reply-To: Martin Rio <martin.rio@gmail.com>
+
+set use_envelope_from
+set envelope_from_address= "martin.rio@gmail.com"
+
+bind editor <space> noop
+macro index,pager y "<save-message>=martin.rio/Archive<enter>" "Archive"
+macro index,pager S "<save-message>=martin.rio/Spam<enter>"  "Spam"
+
+# set signature="~/.mutt/folder_hook_files/signature.ombu.txt"
+
+# vim: set ft=muttrc:

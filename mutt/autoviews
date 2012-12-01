@@ -1,0 +1,3 @@
+auto_view text/x-vcard
+auto_view text/html application/pdf application/msword
+#auto_view text/html

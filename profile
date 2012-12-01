@@ -3,11 +3,11 @@
 # ------------------------------------------------------------------------------
 export LANG=en_US.UTF-8
 export LC_CTYPE=en_US.UTF-8
-export TERM=xterm-color
-export EDITOR="/opt/local/bin/mvim"
+export TERM=xterm-256color
+export EDITOR=vim
 export PAGER=less
 export LESS='-RM'
-export VISUAL="mvim -f"
+export VISUAL=vim
 export NODE_PATH=/opt/local/lib/node_modules
 export DROPBOX=/Users/axolx/Dropbox
 export JAVA_HOME=/Library/Java/Home
@@ -26,11 +26,13 @@ export AWS_CLOUDWATCH_HOME=${DROPBOX}/lib/CloudWatch
 PATH=/opt/local/apache2/bin:$PATH
 PATH=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin:$PATH
 PATH=/opt/local/lib/mysql5/bin:$PATH
-PATH=$DROPBOX/bin:$PATH
+PATH=/opt/local/lib/postgresql91/bin:$PATH
+PATH=$DROPBOX/local/bin:$PATH
 PATH=.:/opt/local/bin:/opt/local/sbin:$PATH
 PATH=$PATH:/Users/axolx/Dropbox/lib/scripts
 PATH=$PATH:$EC2_HOME/bin
 PATH=$PATH:$AWS_CLOUDWATCH_HOME/bin
+PATH=$PATH:/usr/local/bin
 
 # ------------------------------------------------------------------------------
 #  Man paths                                                                {{{1

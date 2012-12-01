@@ -1,0 +1,70 @@
+set my_fastmail=imaps://mail.messagingengine.com:993
+set my_ombu=imaps://imap.gmail.com:993
+set my_martinrio=imaps://imap.gmail.com:993
+
+# imap
+set imap_keepalive = 900
+unset imap_passive # http://wiki.mutt.org/?UserStory/GmailMultiIMAP
+set timeout = 15
+# set header_cache = ~/.mutt/cache/headers # set for each account
+set message_cachedir = ~/.mutt/cache/bodies
+set certificate_file = ~/.mutt/certificates
+set ssl_force_tls=yes
+# set imap_check_subscribed
+
+# other sets {{{1
+set copy
+set move=no
+set noconfirmappend
+set delete=yes # don't ask before deleting
+set ispell="aspell -e -c"
+set ascii_chars=no
+set nomarkers
+set metoo=no
+set quit=ask-yes
+alternative_order text/enriched text/plain text/html 
+set nomark_old            # Cancel mark as read when quit even if not opened
+set fast_reply           # dont ask too many q's when replying
+set include             #includes replied message w/out asking
+set sort=reverse-threads
+set sort_aux=date-received
+set strict_threads
+#set query_command="/opt/local/bin/lbdbq '%s'"  # set address book call
+set query_command="contacts -Sf '%eTOKEN%n' '%s' | sed -e 's/TOKEN/\t/g'"
+unset reply_self
+alternates "^axolx@fastmail\.fm|$^martin\.rio@gmail\.com|martin@ombuweb\.com$"
+set nohelp # hide top toolbar
+set fcc_clear
+set hidden_host
+set charset="utf-8"
+set send_charset="utf-8"
+set mailcap_path=~/.mutt/mailcap
+set copy=no
+set move=no
+set sendmail_wait=-1 # dont wait for mail send to continue
+set editor="vim"
+set sig_on_top=yes
+
+# headers {{{1
+set edit_headers
+ignore *
+unignore From: To: Date: Subject: Cc: Bcc: X-Mailer: User-Agent: X-Spambayes-Classification:
+hdr_order From: To: Subject: Date:  Cc: Bcc: X-Mailer: User-Agent: X-Spambayes-Classification:
+
+# source files {{{1
+# source ~/.mutt/colors/colors.angdraug
+source ~/.mutt/colors/mutt-colors-solarized-dark-256.muttrc
+source ~/.mutt/macros
+source ~/.mutt/autoviews
+source ~/.mutt/bindings
+source ~/.mutt/formats
+
+set folder = ~/Maildir
+mailboxes =ombu/INBOX
+mailboxes =fastmail/INBOX
+mailboxes =martin.rio/INBOX
+
+# hooks {{{1
+folder-hook =ombu/* source ~/.mutt/folder_hook_files/ombuweb
+folder-hook =fastmail/* source ~/.mutt/folder_hook_files/fastmail
+folder-hook =martin.rio/* source ~/.mutt/folder_hook_files/martin.rio

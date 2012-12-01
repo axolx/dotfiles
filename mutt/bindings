@@ -1,0 +1,7 @@
+bind browser "+"  check-new
+bind index "i"  imap-fetch-mail
+bind pager "-"  previous-page
+bind query ";" tag-prefix-cond
+bind index "\Cv" collapse-all
+bind index "<ESC><TAB>" next-unread-mailbox
+

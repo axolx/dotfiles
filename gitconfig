@@ -12,12 +12,16 @@ dt = difftool
 co = checkout
 com = checkout --track -b master origin/master
 one = show -s --pretty='format:%h (%s)'
-glog = log --graph --all --decorate
+glog = log --graph --all --decorate --abbrev-commit
 root = rev-parse --show-toplevel
-; stashing
-sl = stash list
-sd = stash delete
-ss = stash show
+br = branch -a
+mom = merge origin/master
+sub = submodule update --init --recursive
+cherry-pick = cherry-pick -x
+ksdiff = difftool -y -t Kaleidoscope
+ksmerge = mergetool -y -t Kaleidoscope
+ksshow = ksdiff $1^..$1
+lgrep = log --all --full-history --topo-order -S
 
 [core]
 excludesfile = /Users/axolx/Dropbox/dotfiles/gitignore
@@ -34,9 +38,6 @@ textconv = identify
 
 [difftool]
 prompt = false
-
-[difftool "Kaleidoscope"]
-cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
 
 [difftool "sourcetree"]
 cmd = opendiff \"$LOCAL\" \"$REMOTE\"
@@ -56,3 +57,12 @@ autosetuprebase = always
 
 [merge]
 tool = mvim
+
+[rerere]
+enabled = true
+
+[difftool "Kaleidoscope"]
+cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+
+[mergetool "Kaleidoscope"]
+cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot

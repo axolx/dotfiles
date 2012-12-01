@@ -1,0 +1,98 @@
+[general]
+metadata = ~/.offlineimap
+accounts = fastmail, martinrio
+maxsyncaccounts = 2
+maxconnections = 5
+machineui = ttyui, blinkenlights, basic
+ignore-readonly = no
+
+[Account ombu]
+autorefresh = 15
+localrepository = ombu_local
+remoterepository = ombu_remote
+
+[Repository ombu_local]
+type = Maildir
+localfolders = ~/Maildir/ombu
+#nametrans = lambda folder: folder == 'INBOX' and 'INBOX' or '[Gmail].' + folder
+nametrans = lambda folder: re.sub('Trash', '[Gmail]/Trash',
+                           re.sub('Archive', '[Gmail]/All Mail',
+                           re.sub('Drafts', '[Gmail]/Drafts',
+                           re.sub('Important', '[Gmail]/Important',
+                           re.sub('Spam', '[Gmail]/Spam',
+                           re.sub('Starred', '[Gmail]/Starred', folder))))))
+
+[Repository ombu_remote]
+cert_fingerprint=f3043dd689a2e7dddfbef82703a6c65ea9b634c1
+type = IMAP
+remotehost = imap.gmail.com
+ssl = yes
+remoteport = 993
+remoteuser = martin@ombuweb.com
+remotepass = SETME
+holdconnectionopen = no
+idlefolders = ['INBOX']
+folderfilter = lambda foldername: foldername not in ['[Gmail]/Sent Mail', 'cl', 'invoice', 'bill']
+nametrans = lambda folder: re.sub('.*Trash$', 'Trash',
+                           re.sub('.*All Mail$', 'Archive',
+                           re.sub('.*Drafts$', 'Drafts',
+                           re.sub('.*Important$', 'Important',
+                           re.sub('.*Spam$', 'Spam',
+                           re.sub('.*Starred$', 'Starred', folder))))))
+
+[Account martinrio]
+autorefresh = 15
+localrepository = martinrio_local
+remoterepository = martinrio_remote
+
+[Repository martinrio_local]
+type = Maildir
+localfolders = ~/Maildir/martin.rio
+nametrans = lambda folder: re.sub('Trash', '[Gmail]/Trash',
+                           re.sub('Archive', '[Gmail]/All Mail',
+                           re.sub('Drafts', '[Gmail]/Drafts',
+                           re.sub('Important', '[Gmail]/Important',
+                           re.sub('Spam', '[Gmail]/Spam',
+                           re.sub('Starred', '[Gmail]/Starred', folder))))))
+
+[Repository martinrio_remote]
+cert_fingerprint=6d1b5b5ee0180ab493b71d3b94534b5ab937d042
+type = IMAP
+remotehost = imap.gmail.com
+ssl = yes
+remoteport = 993
+remoteuser = martin.rio@gmail.com
+remotepass = SETME
+holdconnectionopen = no
+idlefolders = ['INBOX']
+folderfilter = lambda foldername: foldername not in ['[Gmail]/Sent Mail']
+nametrans = lambda folder: re.sub('.*Trash$', 'Trash',
+                           re.sub('.*All Mail$', 'Archive',
+                           re.sub('.*Drafts$', 'Drafts',
+                           re.sub('.*Important$', 'Important',
+                           re.sub('.*Spam$', 'Spam',
+                           re.sub('.*Starred$', 'Starred', folder))))))
+
+[Account fastmail]
+autorefresh = 15
+localrepository = fastmail_local
+remoterepository = fastmail_remote
+
+[Repository fastmail_local]
+type = Maildir
+localfolders = ~/Maildir/fastmail
+nametrans = lambda folder: folder == 'INBOX' and 'INBOX' or 'INBOX.' + folder
+
+[Repository fastmail_remote]
+cert_fingerprint=fa86c1ca2d4f805e8fe7b8e7076a3ad2ccc52bb4
+type = Maildir
+localfolders = ~/Maildir/fastmail
+type = IMAP
+remotehost = mail.messagingengine.com
+ssl = yes
+remoteport = 993
+remoteuser = axolx@fastmail.fm
+remotepass = SETME
+holdconnectionopen = no
+idlefolders = ['INBOX', 'INBOX.Archive']
+nametrans = lambda foldername: re.sub('^INBOX\.', '', foldername)

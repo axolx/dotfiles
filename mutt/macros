@@ -1,0 +1,7 @@
+macro index,pager,browser "Y" <sync-mailbox><change-folder>?<toggle-mailboxes>"
+macro index "G" "<sync-mailbox>"
+#macro index "y" "<sync-mailbox><change-folder>?<toggle-mailboxes>"   # "-y" screen
+# macro browser "+" "<check-new>"   # refresh
+#macro pager "p"    "<search-opposite>"
+#macro index "<ESC><TAB>" "<next-unread-mailbox>"
+# macro compose "<ESC>s" "<attach-file>$HOME/.mutt/mrio.neur.us.vcf\n"

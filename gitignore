@@ -5,3 +5,4 @@ tags
 .livereload
 node_modules
 *.pyc
+.vimrc

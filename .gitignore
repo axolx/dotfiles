@@ -3,3 +3,4 @@ drush/cache
 irssi/away.log
 chef/checksums
 irssi/away*
+mutt/cache

@@ -1,0 +1,25 @@
+set record=^
+set my_ombu=imaps://imap.gmail.com:993
+
+set header_cache = ~/.mutt/cache/headers_ombu
+
+set spoolfile= =ombu/INBOX
+set postponed= =ombu/Drafts
+set trash= =ombu/Trash
+
+set smtp_url=smtps://martin@ombuweb.com@smtp.gmail.com:465
+set smtp_pass=SETME
+
+my_hdr From: Martin Rio <martin@ombuweb.com>
+my_hdr Reply-To: Martin Rio <martin@ombuweb.com>
+
+set use_envelope_from
+set envelope_from_address= "margin@ombuweb.com"
+
+bind editor <space> noop
+macro index,pager y "<save-message>=ombu/Archive<enter>" "Archive"
+macro index,pager S "<save-message>=ombu/Spam<enter>"  "Spam"
+
+set signature="~/.mutt/folder_hook_files/signature.ombu.txt"
+
+# vim: set ft=muttrc:

@@ -1,0 +1,57 @@
+
+# -*- muttrc -*-
+#
+# Colour settings for mutt.
+#
+
+# Default color definitions (syntax: color [item] [foreground] [background])
+color normal     color109      color235 
+color tree     color240      color235 
+color hdrdefault color237        color234
+color quoted     color239	      color235 
+color signature  yellow       color235 
+color indicator  color250      color240
+color attachment color130    color235
+color error      black        red
+color message    yellow       color235 
+color search     brightwhite  magenta
+color status     black        white
+color tilde      color239        color235
+color bold       brightyellow white
+color markers    red          color235
+
+#color index color95 color235 "~h '^X-Spambayes-Classification: spam'"
+#color index color195 color235 "~h '^X-Spambayes-Classification: unsure'"
+
+# Colour definitions when on a mono screen
+mono tree	none
+mono bold      bold
+mono underline underline
+mono indicator reverse
+
+# Colours for items in the header
+color header color244      color234 "^(To|From):"
+color header color244 color234 "^Subject:"
+color header color244 color234 "^Date:"
+color header color228 color234 ": spam"
+color header color228 color234 ": unsure"
+#color header color208 color234 "Spambayes-Classification"
+
+# Colours for items in the index
+color index color229 	color235 ~N
+color index color130   color235 ~F
+color index brightgreen color235 ~T
+color index brightwhite color235 ~D
+mono  index bold              ~N
+mono  index bold              ~F
+mono  index bold              ~T
+mono  index bold              ~D
+
+# Highlights inside the body of a message.
+
+# URLs
+color body color63  color235 "(http|https|ftp|news|telnet|finger)://[^ \">\t\r\n]*"
+color body  color63 color235 "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
+
+# email addresses
+color body color63 color235  "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"

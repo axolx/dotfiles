@@ -13,6 +13,7 @@ graphlog=
 convert=
 graphlog=
 rebase=
+hggit=
 #hggit = $DROPBOX/lib/repos/hg-git/hggit
 #hgsubversion = $DROPBOX/lib/repos/hgsubversion/hgsubversion
 patchbomb=
