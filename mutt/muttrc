@@ -13,8 +13,6 @@ set ssl_force_tls=yes
 # set imap_check_subscribed
 
 # other sets {{{1
-set copy
-set move=no
 set noconfirmappend
 set delete=yes # don't ask before deleting
 set ispell="aspell -e -c"
@@ -39,7 +37,7 @@ set hidden_host
 set charset="utf-8"
 set send_charset="utf-8"
 set mailcap_path=~/.mutt/mailcap
-set copy=no
+set copy=yes
 set move=no
 set sendmail_wait=-1 # dont wait for mail send to continue
 set editor="vim"
@@ -63,8 +61,10 @@ set folder = ~/Maildir
 mailboxes =ombu/INBOX
 mailboxes =fastmail/INBOX
 mailboxes =martin.rio/INBOX
+set spoolfile="=fastmail/INBOX"  # Default to fastmail/INBOX when opening mutt
 
 # hooks {{{1
 folder-hook =ombu/* source ~/.mutt/folder_hook_files/ombuweb
 folder-hook =fastmail/* source ~/.mutt/folder_hook_files/fastmail
 folder-hook =martin.rio/* source ~/.mutt/folder_hook_files/martin.rio
+source ~/.mutt/hooks

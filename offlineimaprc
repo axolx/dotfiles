@@ -1,8 +1,8 @@
 [general]
 metadata = ~/.offlineimap
 accounts = fastmail, martinrio, ombu
-maxsyncaccounts = 2
-maxconnections = 5
+maxsyncaccounts = 3
+maxconnections = 10
 machineui = ttyui, blinkenlights, basic
 ignore-readonly = no
 
@@ -81,7 +81,13 @@ remoterepository = fastmail_remote
 [Repository fastmail_local]
 type = Maildir
 localfolders = ~/Maildir/fastmail
-nametrans = lambda folder: folder == 'INBOX' and 'INBOX' or 'INBOX.' + folder
+# nametrans = lambda folder: folder == 'INBOX' and 'INBOX' or 'INBOX.' + folder
+nametrans = lambda folder: re.sub('Archive', 'INBOX.Archive',
+                           re.sub('Drafts', 'INBOX.Drafts',
+                           re.sub('Spam', 'INBOX.Junk Mail',
+                           re.sub('Sent', 'INBOX.Sent Items',
+                           re.sub('Trash', 'INBOX.Trash',
+                           re.sub('Starred', 'INBOX.Starred',folder))))))
 
 [Repository fastmail_remote]
 cert_fingerprint=fa86c1ca2d4f805e8fe7b8e7076a3ad2ccc52bb4
@@ -95,4 +101,10 @@ remoteuser = axolx@fastmail.fm
 remotepass = SETME
 holdconnectionopen = no
 idlefolders = ['INBOX', 'INBOX.Archive']
-nametrans = lambda foldername: re.sub('^INBOX\.', '', foldername)
+# nametrans = lambda foldername: re.sub('^INBOX\.', '', foldername)
+nametrans = lambda folder: re.sub('INBOX.Archive$', 'Archive',
+                           re.sub('INBOX.Drafts$', 'Drafts',
+                           re.sub('INBOX.Junk\ Mail$', 'Spam',
+                           re.sub('INBOX.Sent\ Items$', 'Sent',
+                           re.sub('INBOX.Trash$', 'Trash',
+                           re.sub('INBOX.Starred$', 'Starred', folder))))))

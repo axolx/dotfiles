@@ -4,23 +4,24 @@ set my_fastmail=imaps://mail.messagingengine.com:993
 
 source ~/.mutt/folder_hook_files/defaults.global
 
-set header_cache = ~/.mutt/cache/headers_fastmail
+set header_cache=~/.mutt/cache/headers_fastmail
 
 set smtp_url=smtps://axolx@fastmail.fm@mail.messagingengine.com:465
 set smtp_pass=SETME
 
 set spoolfile="=fastmail/INBOX"
 set postponed="=fastmail/Drafts"
-set record="=fastmail/Sent Items"
+set record="=fastmail/Sent"
 set trash="=fastmail/Trash"
 
 my_hdr From: Martin <axolx@fastmail.fm>
 my_hdr Reply-To: Martin <axolx@fastmail.fm>
 
 set use_envelope_from
-set envelope_from_address= "axolx@fastmail.fm"
+set envelope_from_address="axolx@fastmail.fm"
 
-macro index,pager y "<save-message>=fastmail/Archive<enter>" "Archive"
-macro index,pager S "<save-message>=fastmail/Junk Mail<enter>"  "Spam"
+macro index,pager S "<save-message>=fastmail/Spam"  "Spam"
+
+save-hook . =fastmail/Archive
 
 # vim: set ft=muttrc:

@@ -17,9 +17,10 @@ set use_envelope_from
 set envelope_from_address= "margin@ombuweb.com"
 
 bind editor <space> noop
-macro index,pager y "<save-message>=ombu/Archive<enter>" "Archive"
-macro index,pager S "<save-message>=ombu/Spam<enter>"  "Spam"
+macro index,pager S "<save-message>=ombu/Spam"  "Spam"
 
 set signature="~/.mutt/folder_hook_files/signature.ombu.txt"
+
+save-hook . =ombu/Archive
 
 # vim: set ft=muttrc:

@@ -7,4 +7,4 @@ macro index "G" "<sync-mailbox>"
 # macro compose "<ESC>s" "<attach-file>$HOME/.mutt/mrio.neur.us.vcf\n"
 
 # mutt-notmuch integration
-macro index S "<enter-command>unset wait_key<enter><shell-escape>~/.mutt/mutt-notmuch-py.py ~/Maildir/tmp/search<enter><change-folder-readonly>+tmp/search<enter>" "search mail (using notmuch)"
+macro index Q "<enter-command>unset wait_key<enter><shell-escape>~/.mutt/mutt-notmuch-py.py ~/Maildir/tmp/search<enter><change-folder-readonly>+tmp/search<enter>" "search mail (using notmuch)"

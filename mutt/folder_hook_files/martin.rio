@@ -17,8 +17,9 @@ set use_envelope_from
 set envelope_from_address= "martin.rio@gmail.com"
 
 bind editor <space> noop
-macro index,pager y "<save-message>=martin.rio/Archive<enter>" "Archive"
-macro index,pager S "<save-message>=martin.rio/Spam<enter>"  "Spam"
+macro index,pager S "<save-message>=martin.rio/Spam"  "Spam"
+
+save-hook . =martin.rio/Archive
 
 # set signature="~/.mutt/folder_hook_files/signature.ombu.txt"
 

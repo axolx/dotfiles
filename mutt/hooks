@@ -1,2 +1,4 @@
-folder-hook * 'unset collapse_unread; push <collapse-all>'
-folder-hook * 'unset collapse_unread; push <collapse-all>'
+# folder-hook * 'unset collapse_unread; push <collapse-all>'
+# folder-hook * 'unset collapse_unread; push <collapse-all>'
+
+# vim: set ft=muttrc:
