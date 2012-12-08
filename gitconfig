@@ -20,7 +20,7 @@ sub = submodule update --init --recursive
 cherry-pick = cherry-pick -x
 ksdiff = difftool -y -t Kaleidoscope
 ksmerge = mergetool -y -t Kaleidoscope
-ksshow = ksdiff $1^..$1
+ksshow = "!sh -c 'SHA=${1:-HEAD}; git difftool -y -t Kaleidoscope $SHA^..$SHA;' -"
 lgrep = log --all --full-history --topo-order -S
 
 [core]

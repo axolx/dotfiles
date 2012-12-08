@@ -27,8 +27,9 @@ set include             #includes replied message w/out asking
 set sort=reverse-threads
 set sort_aux=date-received
 set strict_threads
-#set query_command="/opt/local/bin/lbdbq '%s'"  # set address book call
-set query_command="contacts -Sf '%eTOKEN%n' '%s' | sed -e 's/TOKEN/\t/g'"
+# set query_command="/opt/local/bin/lbdbq '%s'"  # set address book call
+# set query_command="contacts -Sf '%eTOKEN%n' '%s' | sed -e 's/TOKEN/\t/g'"
+set query_command = "mu cfind --format=mutt-ab '%s'"
 unset reply_self
 alternates "^axolx@fastmail\.fm|$^martin\.rio@gmail\.com|martin@ombuweb\.com$"
 set nohelp # hide top toolbar
