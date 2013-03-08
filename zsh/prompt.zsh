@@ -70,6 +70,7 @@ set_prompt () {
 }
 
 precmd() {
+  # title is defined in window.zsh
   title "zsh" "%m" "%55<...<%~"
   set_prompt
 }
