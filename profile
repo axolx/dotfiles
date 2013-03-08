@@ -14,11 +14,6 @@ export JAVA_HOME=/Library/Java/Home
 export GEM_PATH=/opt/local/lib/ruby/gems/1.8
 export EC2_HOME=${DROPBOX}/lib/ec2-api-tools
 export AWS_CLOUDWATCH_HOME=${DROPBOX}/lib/CloudWatch
-#export EC2_PRIVATE_KEY=${HOME}/.ec2/axolx-pk-RJUMGZU7325L4VUDQW6NUFAQG3TNBBCK.pem
-#export EC2_CERT=${HOME}/.ec2/axolx-cert-RJUMGZU7325L4VUDQW6NUFAQG3TNBBCK.pem
-export EC2_PRIVATE_KEY=${HOME}/.ec2/ombu-pk-J4TXTFWLUFVVOTGW5Q3RQKSHAKGC2KH2.pem
-export EC2_CERT=${HOME}/.ec2/ombu-cert-J4TXTFWLUFVVOTGW5Q3RQKSHAKGC2KH2.pem
-export AWS_CLOUDWATCH_HOME=${DROPBOX}/lib/CloudWatch
 
 # ------------------------------------------------------------------------------
 #  Bin paths                                                                {{{1

@@ -7,7 +7,7 @@ ui = true
 
 [alias]
 st = status
-ci = commit
+c = commit -m
 dt = difftool
 co = checkout
 com = checkout --track -b master origin/master
@@ -25,13 +25,14 @@ lgrep = log --all --full-history --topo-order -S
 
 [core]
 excludesfile = /Users/axolx/Dropbox/dotfiles/gitignore
+whitespace = warn
 
 [github]
 user = axolx
 token = SETME
 
 [diff]
-tool = vimdiff
+tool = Kaleidoscope
 
 [diff "image"]
 textconv = identify
@@ -56,16 +57,15 @@ trustExitCode = false
 autosetuprebase = always
 
 [merge]
-tool = mvim
+summary = true
+log = true
 
 [rerere]
 enabled = true
 
 [difftool "Kaleidoscope"]
 cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
-
-[mergetool "Kaleidoscope"]
-cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
-
 [push]
 default = simple
+[help]
+autocorrect = 10

@@ -2,3 +2,5 @@
 --type-set=less=.less
 --smart-case
 #--type=python
+# Do not search these directories for quicker lookup
+--ignore-dir=log,tags,tmp
