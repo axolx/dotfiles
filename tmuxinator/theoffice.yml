@@ -1,0 +1,12 @@
+project_name: theoffice
+project_root: ~/sandbox/envs/theoffice
+tabs:
+
+  - main:
+      pre: workon theoffice
+      layout: main-vertical
+      panes:
+        - workon theoffice && vim -c Ex
+        - ls -l
+        - workon theoffice && python manage.py shell --settings theoffice.settings.development
+  - server: workon theoffice && python manage.py runserver --settings theoffice.settings.development

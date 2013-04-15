@@ -1,0 +1,10 @@
+project_name: puppetboot
+project_root: ~/sandbox/envs/puppetboot
+
+tabs:
+  - main:
+      layout: main-vertical
+      panes:
+        - vim -c Ex
+        - ls -l
+        - #empty, will just run plain shell
